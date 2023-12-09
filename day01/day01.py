@@ -44,8 +44,8 @@ def calibration_sum(lines):
         digits = digits_and_spelled_out_re.findall(line)
 
         first = to_digit(digits[0])
-        second = to_digit(digits[-1])
-        sum += first*10 + second
+        last = to_digit(digits[-1])
+        sum += first*10 + last
 
     return sum
 
