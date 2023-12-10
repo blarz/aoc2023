@@ -16,6 +16,7 @@ const MAX_BLUE int = 14
 
 func main() {
 	file, err := os.Open("input")
+	//file, err := os.Open("sample.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,7 +26,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	valid_games_sum := 0
+	//valid_games_sum := 0
+	power := 0
 	cube_count_map := map[string]int{}
 
 	scanner := bufio.NewScanner(file)
@@ -51,19 +53,23 @@ func main() {
 				}
 			}
 		}
-		if cube_count_map["green"] > MAX_GREEN || cube_count_map["red"] > MAX_RED || cube_count_map["blue"] > MAX_BLUE {
-			fmt.Println("Too many", cube_count_map)
+		// Part 1
+		/*
+			if cube_count_map["green"] > MAX_GREEN || cube_count_map["red"] > MAX_RED || cube_count_map["blue"] > MAX_BLUE {
+				fmt.Println("Too many", cube_count_map)
 
-		} else {
-			game_id := strings.Split(game[0], " ")
-			game_id_int, err := strconv.Atoi(game_id[1])
+			} else {
+				game_id := strings.Split(game[0], " ")
+				game_id_int, err := strconv.Atoi(game_id[1])
 
-			if err != nil {
-				panic(err)
+				if err != nil {
+					panic(err)
+				}
+				valid_games_sum += game_id_int
+				fmt.Println("New sum", valid_games_sum)
 			}
-			valid_games_sum += game_id_int
-			fmt.Println("New sum", valid_games_sum)
-		}
+		*/
+		power += cube_count_map["red"] * cube_count_map["blue"] * cube_count_map["green"]
 		cube_count_map = make(map[string]int)
 
 	}
@@ -71,5 +77,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("SUM", valid_games_sum)
+	//fmt.Println("SUM", valid_games_sum)
+	fmt.Println("POWER", power)
 }
