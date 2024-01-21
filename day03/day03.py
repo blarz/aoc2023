@@ -1,4 +1,5 @@
 import sys
+import re
 
 
 def part_sums(lines):
@@ -52,13 +53,49 @@ def part_sums(lines):
     return sum
 
 
+def gear_ratio(lines):
+    number_of_lines = len(lines)
+    ratio = 0
+
+    asterisk_positions = []
+    for line_index, line in enumerate(lines):
+        asterisk_positions += [(line_index, asterisk.start())
+                               for asterisk in re.finditer(r'\*', line)]
+    if not asterisk_positions:
+        return 0
+
+    for aster in asterisk_positions:
+        print(f"Checking surroundings for * at {aster}")
+
+        surrounding_parts = []
+        for line_index in (aster[0], aster[0]+1, aster[0]-1):
+            if line_index < 0 or line_index > number_of_lines:
+                continue
+
+            for surrounding_match in re.finditer(r'\d*', lines[line_index]):
+                if not surrounding_match.group():
+                    # Ignore empty matches from finditer...
+                    continue
+                if aster[1] <= surrounding_match.end() \
+                        and aster[1] >= surrounding_match.start()-1:
+                    surrounding_parts.append(int(surrounding_match[0]))
+
+        if len(surrounding_parts) == 2:
+            print(f"Found exactly 2 parts around {aster}: {surrounding_parts}")
+            ratio += surrounding_parts[0] * surrounding_parts[1]
+
+    return ratio
+
+
 def main(argv):
     if len(argv) != 1:
         exit(-1)
 
     with open(argv[0]) as input:
         lines = input.readlines()
-        print(f"Sum: {int(part_sums(lines))}")
+        # Part 1:
+        # print(f"Sum: {int(part_sums(lines))}")
+        print(f"Gear Ratio: {int(gear_ratio(lines))}")
 
 
 if __name__ == "__main__":
